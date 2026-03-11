@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class BookMyStayApp {
     public static void main(String[] args) {
         System.out.println("Welcome to the Hotel Booking Management System!");
@@ -7,16 +10,18 @@ public class BookMyStayApp {
         DoubleRoom doubleRoom = new DoubleRoom();
         SuiteRoom suite = new SuiteRoom();
 
-        System.out.println("Hotel Room Initialization\n");
+        RoomInventory inventory = new RoomInventory();
+
+        System.out.println("Hotel Room Inventory Status\n");
 
         System.out.println("Single Room:");
-        single.displayRoomDetails(5);
+        single.displayRoomDetails(inventory.getRoomAvailability().get("SingleRoom"));
 
         System.out.println("Double Room:");
-        doubleRoom.displayRoomDetails(3);
+        doubleRoom.displayRoomDetails(inventory.getRoomAvailability().get("DoubleRoom"));
 
         System.out.println("Suite Room:");
-        suite.displayRoomDetails(2);
+        suite.displayRoomDetails(inventory.getRoomAvailability().get("SuiteRoom"));
     }
 }
 
@@ -35,7 +40,7 @@ abstract class Room {
         System.out.println("Beds: " + numberOfBeds);
         System.out.println("Size: " + squareFeet + " sqft");
         System.out.println("Price per night: " + pricePerNight);
-        System.out.println("Available: " + available);
+        System.out.println("Available Rooms: " + available);
         System.out.println();
     }
 }
@@ -55,5 +60,28 @@ class DoubleRoom extends Room {
 class SuiteRoom extends Room {
     public SuiteRoom() {
         super(3, 750, 5000.0);
+    }
+}
+
+class RoomInventory {
+    private Map<String, Integer> roomAvailability;
+
+    public RoomInventory() {
+        roomAvailability = new HashMap<>();
+        initializeInventory();
+    }
+
+    private void initializeInventory() {
+        roomAvailability.put("SingleRoom", 5);
+        roomAvailability.put("DoubleRoom", 3);
+        roomAvailability.put("SuiteRoom", 2);
+    }
+
+    public Map<String, Integer> getRoomAvailability() {
+        return roomAvailability;
+    }
+
+    public void updateAvailability(String roomType, int count) {
+        roomAvailability.put(roomType, count);
     }
 }
